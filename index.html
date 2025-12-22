@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP Specific Editor V51.0</title>
+    <title>SOP Specific Editor V51.2</title>
     <link rel="icon" type="image/png" href="https://github.com/asendia2025/mfg-capa/blob/main/img/logo_company.png?raw=true">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -51,7 +51,7 @@
         
         <div class="h-12 bg-zinc-50 border-b border-zinc-200 flex items-center justify-between px-6 shrink-0 z-30">
             <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-400"></div><div class="w-3 h-3 rounded-full bg-amber-400"></div><div class="w-3 h-3 rounded-full bg-green-400"></div></div>
-            <div class="flex-1 max-w-xl mx-4 text-center text-[10px] font-bold text-zinc-400 tracking-widest uppercase">mfg.tech.center / Procedure Editor V51.0</div>
+            <div class="flex-1 max-w-xl mx-4 text-center text-[10px] font-bold text-zinc-400 tracking-widest uppercase">mfg.tech.center / SOP Specific Editor V51.2</div>
             
             <div class="flex items-center gap-2">
                 <button onclick="openAiModal('refine')" class="flex items-center gap-2 px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded text-[10px] font-bold transition">
@@ -228,10 +228,7 @@
 
         // [FIXED] PASTE LOGIC: Prioritize TEXT over IMAGE
         editor.addEventListener('paste', (e) => {
-            // 1. Try to get plain text first
             const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-            
-            // 2. If valid text exists, force TEXT paste (Apply 'T' Style)
             if (text && text.trim().length > 0) {
                 e.preventDefault();
                 const lines = text.split(/\r\n|\n|\r/);
@@ -240,9 +237,7 @@
                     if (line.trim() !== '') htmlToInsert += `<p class="text-base text-black mb-2 pl-12">${line}</p>`;
                 });
                 document.execCommand('insertHTML', false, htmlToInsert);
-            } 
-            // 3. Only if NO text, check for images (Screenshots, etc.)
-            else {
+            } else {
                 const items = (e.clipboardData || window.clipboardData).items;
                 for (let item of items) {
                     if (item.kind === 'file' && item.type.includes('image/')) {
@@ -252,11 +247,11 @@
                         reader.onload = (ev) => {
                             const img = document.createElement('img');
                             img.src = ev.target.result;
-                            img.style.width = "100%";
+                            img.style.width = "50%";
                             insertNodeAtCursor(img);
                         };
                         reader.readAsDataURL(blob);
-                        break; // Stop after finding first image
+                        break;
                     }
                 }
             }
@@ -355,7 +350,7 @@
             if (!input.files[0]) return;
             const reader = new FileReader();
             reader.onload = (e) => {
-                const img = document.createElement('img'); img.src = e.target.result; img.style.width = "100%"; insertNodeAtCursor(img);
+                const img = document.createElement('img'); img.src = e.target.result; img.style.width = "50%"; insertNodeAtCursor(img);
             };
             reader.readAsDataURL(input.files[0]); input.value = '';
         }
@@ -425,11 +420,16 @@
             editor.focus(); saveHistory();
         }
 
+        // [FIXED] Updated applyStyle to remove inherited style attributes (Fixes Image > Enter > Header margin issue)
         function applyStyle(t) {
             document.execCommand('formatBlock', false, 'p'); const sel = window.getSelection();
             if (sel.rangeCount > 0) {
                 let n = sel.anchorNode; while (n && n.nodeName !== 'P' && n !== editor) n = n.parentNode;
                 if (n && n.nodeName === 'P') {
+                    // RESET INLINE STYLES first to clear any inherited margins/alignment
+                    n.removeAttribute('style');
+                    
+                    // APPLY CLASS
                     n.className = t==='H1' ? 'text-xl font-bold text-black mb-4 mt-6 pl-0' : t==='H2' ? 'text-lg font-bold text-black mb-3 mt-4 pl-6' : 'text-base text-black mb-2 pl-12';
                     if(t==='TB') n.classList.add('font-bold');
                 }
