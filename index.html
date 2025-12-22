@@ -99,8 +99,8 @@
                 <div class="flex flex-col gap-1">
                     <label class="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Layout</label>
                     <select id="page-layout" onchange="changePageWidth(this.value)" class="bg-zinc-100 border-none rounded px-2 py-1.5 font-bold text-zinc-700 text-xs w-28 outline-none cursor-pointer">
-                        <option value="paper-a4" selected>A4 Portrait</option>
-                        <option value="paper-wide">A4 Wide</option>
+                        <option value="paper-a4">A4 Portrait</option>
+                        <option value="paper-wide" selected>A4 Wide</option>
                     </select>
                 </div>
                 <div class="pb-4 ml-auto self-center flex gap-2">
@@ -168,7 +168,7 @@
             </div>
 
             <div class="w-full flex-1 overflow-y-auto p-8 bg-zinc-800/10 scroll-smooth" id="canvas-wrapper">
-                <div id="paper-container" class="paper-a4 mx-auto bg-white shadow-lg border border-zinc-200 min-h-full flex flex-col relative transition-all duration-300">
+                <div id="paper-container" class="paper-wide mx-auto bg-white shadow-lg border border-zinc-200 min-h-full flex flex-col relative transition-all duration-300">
                     <div id="editor" contenteditable="true" class="editor-content flex-1 p-12 focus:outline-none text-zinc-800 leading-relaxed text-base" oninput="saveHistory()"></div>
                 </div>
             </div>
