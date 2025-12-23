@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP Specific Editor V51.2</title>
+    <title>SOP Specific Editor V54.1</title>
     <link rel="icon" type="image/png" href="https://github.com/asendia2025/mfg-capa/blob/main/img/logo_company.png?raw=true">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -30,8 +30,9 @@
         #img-resizer-handle { position: fixed; width: 14px; height: 14px; background: #3b82f6; border: 2px solid white; z-index: 1000; cursor: se-resize; border-radius: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.4); display: none; }
         .editor-content img { max-width: 100%; border-radius: 4px; display: block; cursor: pointer; transition: outline 0.1s; margin: 10px 0; }
         .editor-content img.selected { outline: 4px solid #3b82f6; outline-offset: 1px; }
+        /* Table Styles for Editor */
         .editor-content table { border-collapse: collapse; width: calc(100% - 3rem); margin: 10px 0 10px 3rem; table-layout: fixed; }
-        .editor-content th, .editor-content td { border: 1px solid #d4d4d8; padding: 8px; text-align: left; position: relative; min-width: 40px; }
+        .editor-content th, .editor-content td { border: 1px solid #d4d4d8; padding: 8px; text-align: left; position: relative; min-width: 40px; vertical-align: middle; }
         .editor-content th { background-color: #f4f4f5; font-weight: bold; }
         .resizer { position: absolute; top: 0; right: -2px; width: 5px; height: 100%; cursor: col-resize; user-select: none; z-index: 10; }
         .button { cursor: pointer; position: relative; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; border: none; padding: 6px 16px; min-height: 32px; color: white; font-weight: 500; font-size: 13px; background: #4f46e5; transition: filter 0.2s; }
@@ -51,7 +52,7 @@
         
         <div class="h-12 bg-zinc-50 border-b border-zinc-200 flex items-center justify-between px-6 shrink-0 z-30">
             <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-400"></div><div class="w-3 h-3 rounded-full bg-amber-400"></div><div class="w-3 h-3 rounded-full bg-green-400"></div></div>
-            <div class="flex-1 max-w-xl mx-4 text-center text-[10px] font-bold text-zinc-400 tracking-widest uppercase">mfg.tech.center / SOP Specific Editor V51.2</div>
+            <div class="flex-1 max-w-xl mx-4 text-center text-[10px] font-bold text-zinc-400 tracking-widest uppercase">mfg.tech.center / SOP Specific Editor V54.1</div>
             
             <div class="flex items-center gap-2">
                 <button onclick="openAiModal('refine')" class="flex items-center gap-2 px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded text-[10px] font-bold transition">
@@ -119,15 +120,15 @@
                     <button onclick="redo()" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Redo"><i data-lucide="redo-2" class="w-4 h-4"></i></button>
                 </div>
                 <div class="flex items-center gap-1 border-r border-zinc-200 pr-2">
-                    <button onmousedown="event.preventDefault(); execCmd('justifyLeft')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600"><i data-lucide="align-left" class="w-4 h-4"></i></button>
-                    <button onmousedown="event.preventDefault(); execCmd('justifyCenter')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600"><i data-lucide="align-center" class="w-4 h-4"></i></button>
-                    <button onmousedown="event.preventDefault(); execCmd('justifyRight')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600"><i data-lucide="align-right" class="w-4 h-4"></i></button>
+                    <button onmousedown="event.preventDefault(); execCmd('justifyLeft')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Left (Table Cell Supported)"><i data-lucide="align-left" class="w-4 h-4"></i></button>
+                    <button onmousedown="event.preventDefault(); execCmd('justifyCenter')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Center (Table Cell Supported)"><i data-lucide="align-center" class="w-4 h-4"></i></button>
+                    <button onmousedown="event.preventDefault(); execCmd('justifyRight')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Right (Table Cell Supported)"><i data-lucide="align-right" class="w-4 h-4"></i></button>
                 </div>
                 <div class="flex items-center gap-1 bg-zinc-100 p-1 rounded-lg border-r border-zinc-200 pr-2">
                     <button onmousedown="event.preventDefault(); applyStyle('H1')" class="px-3 py-1.5 hover:bg-white rounded text-zinc-800 text-xs font-bold" title="H1 (0 Tab)">H1</button>
                     <button onmousedown="event.preventDefault(); applyStyle('H2')" class="px-3 py-1.5 hover:bg-white rounded text-zinc-700 text-xs font-bold" title="H2 (1 Tab)">H2</button>
                     <button onmousedown="event.preventDefault(); applyStyle('P')" class="px-3 py-1.5 hover:bg-white rounded text-zinc-600 text-xs font-medium" title="Text (2 Tab)">T</button>
-                    <button onmousedown="event.preventDefault(); execCmd('bold')" class="px-3 py-1.5 hover:bg-white rounded text-zinc-900 text-xs font-bold underline decoration-indigo-500" title="Bold Selection (Toggle)">B</button>
+                    <button onmousedown="event.preventDefault(); execCmd('bold')" class="px-3 py-1.5 hover:bg-white rounded text-zinc-900 text-xs font-bold underline decoration-indigo-500" title="Bold Selection (Table Safe)">B</button>
                     <button onmousedown="event.preventDefault(); execCmd('strikeThrough')" class="px-3 py-1.5 hover:bg-white rounded text-zinc-900 text-xs font-medium line-through decoration-zinc-500" title="Strikethrough">S</button>
                     <button onmousedown="event.preventDefault(); execCmd('removeFormat')" class="px-3 py-1.5 hover:bg-white rounded text-zinc-500 text-xs font-medium" title="Clear Formatting">Tx</button>
                 </div>
@@ -143,11 +144,8 @@
                     <button onmousedown="event.preventDefault(); execCmd('hiliteColor', '#bbf7d0')" class="w-5 h-5 rounded bg-green-200 flex justify-center items-center" title="Highlight Green"><i data-lucide="highlighter" class="w-3 h-3 text-green-600"></i></button>
                 </div>
                 <div class="flex items-center gap-1 border-r border-zinc-200 pr-2">
-                    <button onmousedown="event.preventDefault(); insertStatusIcon('warning')" class="p-1.5 hover:bg-red-50 rounded text-red-600" title="Warning"><i data-lucide="alert-triangle" class="w-4 h-4"></i></button>
-                    <button onmousedown="event.preventDefault(); insertStatusIcon('caution')" class="p-1.5 hover:bg-amber-50 rounded text-amber-600" title="Caution"><i data-lucide="alert-circle" class="w-4 h-4"></i></button>
-                    <button onmousedown="event.preventDefault(); insertStatusIcon('crucial')" class="p-1.5 hover:bg-blue-50 rounded text-blue-600" title="Point"><i data-lucide="target" class="w-4 h-4"></i></button>
-                </div>
-                <div class="flex items-center gap-1 border-r border-zinc-200 pr-2">
+                    <button onmousedown="event.preventDefault(); execCmd('tableCellGray')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Set Table Cell Gray(#E7E6E6)"><i data-lucide="paint-bucket" class="w-4 h-4 fill-zinc-300"></i></button>
+                    
                     <button onmousedown="event.preventDefault(); openTableModal()" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Insert Table (Custom)"><i data-lucide="table" class="w-4 h-4"></i></button>
                     <button onmousedown="event.preventDefault(); modifyTable('row', 'add')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Add Row"><i data-lucide="list-plus" class="w-4 h-4"></i></button>
                     <button onmousedown="event.preventDefault(); modifyTable('row', 'del')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Del Row"><i data-lucide="list-x" class="w-4 h-4"></i></button>
@@ -156,6 +154,11 @@
                     <button onmousedown="event.preventDefault(); modifyTable('merge', 'right')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Merge Right"><i data-lucide="arrow-right-from-line" class="w-4 h-4"></i></button>
                     <button onmousedown="event.preventDefault(); modifyTable('merge', 'down')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Merge Down"><i data-lucide="arrow-down-from-line" class="w-4 h-4"></i></button>
                     <button onmousedown="event.preventDefault(); modifyTable('split')" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Split"><i data-lucide="grid-2x2" class="w-4 h-4"></i></button>
+                </div>
+                <div class="flex items-center gap-1 border-r border-zinc-200 pr-2">
+                    <button onmousedown="event.preventDefault(); insertStatusIcon('warning')" class="p-1.5 hover:bg-red-50 rounded text-red-600" title="Warning"><i data-lucide="alert-triangle" class="w-4 h-4"></i></button>
+                    <button onmousedown="event.preventDefault(); insertStatusIcon('caution')" class="p-1.5 hover:bg-amber-50 rounded text-amber-600" title="Caution"><i data-lucide="alert-circle" class="w-4 h-4"></i></button>
+                    <button onmousedown="event.preventDefault(); insertStatusIcon('crucial')" class="p-1.5 hover:bg-blue-50 rounded text-blue-600" title="Point"><i data-lucide="target" class="w-4 h-4"></i></button>
                 </div>
                 <div class="flex items-center gap-1 border-r border-zinc-200 pr-2">
                     <button onmousedown="event.preventDefault(); insertPageBreak()" class="p-1.5 hover:bg-zinc-100 rounded text-zinc-600" title="Insert Page Break"><i data-lucide="scissors" class="w-4 h-4"></i></button>
@@ -226,9 +229,47 @@
         editor.addEventListener('mouseup', saveSelection);
         editor.addEventListener('keyup', saveSelection);
 
-        // [FIXED] PASTE LOGIC: Prioritize TEXT over IMAGE
+        // [V54.1 FIXED] Paste: Corrected Order (Table -> Image -> Text)
         editor.addEventListener('paste', (e) => {
-            const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+            const clipboard = e.clipboardData || window.clipboardData;
+            const html = clipboard.getData('text/html');
+            const text = clipboard.getData('text/plain');
+            const items = clipboard.items;
+
+            // 1. Detect Tables (Highest Priority)
+            if (html && html.toLowerCase().includes('<table')) {
+                e.preventDefault();
+                let cleanHtml = html;
+                cleanHtml = cleanHtml.replace(/<table/gi, '<table style="border-collapse: collapse; width: calc(100% - 3rem); margin: 10px 0 10px 3rem; table-layout: fixed;"');
+                cleanHtml = cleanHtml.replace(/<td/gi, '<td style="border: 1px solid #d4d4d8; padding: 8px; font-family: \'Inter\', \'Noto Sans KR\', sans-serif; font-size: 16px; font-weight: normal; color: #000; vertical-align: middle;"');
+                cleanHtml = cleanHtml.replace(/<th/gi, '<th style="border: 1px solid #d4d4d8; padding: 8px; background-color: #f4f4f5; font-family: \'Inter\', \'Noto Sans KR\', sans-serif; font-size: 16px; font-weight: bold; color: #000; vertical-align: middle;"');
+                document.execCommand('insertHTML', false, cleanHtml);
+                addSpacingAndSetTextStyle(); 
+                return;
+            }
+
+            // 2. Detect Images (Files) in Clipboard - FIXED PRIORITY
+            // Checked BEFORE plain text to prevent text fallback from blocking images
+            if (items) {
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].kind === 'file' && items[i].type.includes('image/')) {
+                        e.preventDefault();
+                        const blob = items[i].getAsFile();
+                        const reader = new FileReader();
+                        reader.onload = (ev) => {
+                            const img = document.createElement('img');
+                            img.src = ev.target.result;
+                            img.style.width = "50%";
+                            insertNodeAtCursor(img);
+                            addSpacingAndSetTextStyle();
+                        };
+                        reader.readAsDataURL(blob);
+                        return; // Stop processing, image handled
+                    }
+                }
+            }
+
+            // 3. Plain Text (Fallback)
             if (text && text.trim().length > 0) {
                 e.preventDefault();
                 const lines = text.split(/\r\n|\n|\r/);
@@ -237,36 +278,104 @@
                     if (line.trim() !== '') htmlToInsert += `<p class="text-base text-black mb-2 pl-12">${line}</p>`;
                 });
                 document.execCommand('insertHTML', false, htmlToInsert);
-            } else {
-                const items = (e.clipboardData || window.clipboardData).items;
-                for (let item of items) {
-                    if (item.kind === 'file' && item.type.includes('image/')) {
-                        e.preventDefault();
-                        const blob = item.getAsFile();
-                        const reader = new FileReader();
-                        reader.onload = (ev) => {
-                            const img = document.createElement('img');
-                            img.src = ev.target.result;
-                            img.style.width = "50%";
-                            insertNodeAtCursor(img);
-                        };
-                        reader.readAsDataURL(blob);
-                        break;
-                    }
-                }
-            }
+            } 
             saveHistory();
         });
 
+        function addSpacingAndSetTextStyle() {
+            const spacingHtml = `<p><br></p><p><br></p><p class="text-base text-black mb-2 pl-12"><br></p>`;
+            document.execCommand('insertHTML', false, spacingHtml);
+        }
+
         function insertNodeAtCursor(node) {
-            editor.focus(); const sel = window.getSelection();
-            if (lastRange) { sel.removeAllRanges(); sel.addRange(lastRange); }
-            if (sel.rangeCount > 0) { const range = sel.getRangeAt(0); range.deleteContents(); range.insertNode(node); const br = document.createElement('p'); br.innerHTML = '<br>'; node.after(br); } 
-            else { editor.appendChild(node); }
+            editor.focus(); // Ensure focus
+            const sel = window.getSelection();
+            
+            // Restore lost range if valid
+            if (lastRange) { 
+                sel.removeAllRanges(); 
+                sel.addRange(lastRange); 
+            }
+            
+            if (sel.rangeCount > 0) { 
+                const range = sel.getRangeAt(0); 
+                range.deleteContents(); 
+                range.insertNode(node); 
+                
+                // Move cursor after image
+                range.setStartAfter(node);
+                range.setEndAfter(node);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } else { 
+                editor.appendChild(node); 
+            }
             saveHistory(); deselectImage();
         }
 
-        // --- Table Modal ---
+        // --- Table & Command Logic ---
+        
+        function getSelectedTableCells() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount || selection.isCollapsed) return [];
+            
+            const range = selection.getRangeAt(0);
+            let container = range.commonAncestorContainer;
+            if(container.nodeType === 3) container = container.parentNode;
+            
+            const table = container.closest('table');
+            if (!table) return [];
+
+            const selectedCells = [];
+            const cells = table.querySelectorAll('td, th');
+
+            cells.forEach(cell => {
+                if (selection.containsNode(cell, true)) {
+                    selectedCells.push(cell);
+                }
+            });
+            return selectedCells;
+        }
+
+        function execCmd(c, v=null) {
+            if (currentImg && ['justifyLeft', 'justifyCenter', 'justifyRight'].includes(c)) {
+                currentImg.style.marginLeft = (c === 'justifyLeft') ? "0" : "auto";
+                currentImg.style.marginRight = (c === 'justifyRight') ? "0" : "auto";
+                updateHandlePosition(); editor.focus(); saveHistory(); return;
+            }
+
+            const tableCells = getSelectedTableCells();
+            
+            if (tableCells.length > 0) {
+                tableCells.forEach(cell => {
+                    if (c === 'bold') {
+                        cell.style.fontWeight = (cell.style.fontWeight === 'bold' || cell.style.fontWeight === '700') ? 'normal' : 'bold';
+                    } else if (c === 'justifyLeft') cell.style.textAlign = 'left';
+                    else if (c === 'justifyCenter') cell.style.textAlign = 'center';
+                    else if (c === 'justifyRight') cell.style.textAlign = 'right';
+                    else if (c === 'tableCellGray') cell.style.backgroundColor = '#E7E6E6';
+                    else if (c === 'foreColor') cell.style.color = v;
+                });
+                editor.focus(); saveHistory(); return; 
+            }
+            
+            const sel = window.getSelection();
+            if (sel.rangeCount > 0) {
+                let node = sel.anchorNode;
+                if(node.nodeType === 3) node = node.parentNode;
+                const singleCell = node.closest('td, th');
+                if (singleCell) {
+                    if (c === 'tableCellGray') { singleCell.style.backgroundColor = '#E7E6E6'; saveHistory(); return; }
+                    if (c === 'justifyLeft') { singleCell.style.textAlign = 'left'; saveHistory(); return; }
+                    if (c === 'justifyCenter') { singleCell.style.textAlign = 'center'; saveHistory(); return; }
+                    if (c === 'justifyRight') { singleCell.style.textAlign = 'right'; saveHistory(); return; }
+                }
+            }
+
+            if (c !== 'tableCellGray') { document.execCommand(c, false, v); }
+            editor.focus(); saveHistory();
+        }
+
         function openTableModal() {
             if(lastRange) { const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(lastRange); }
             document.getElementById('table-modal').classList.remove('hidden');
@@ -274,12 +383,14 @@
         function confirmInsertTable() {
             const rows = parseInt(document.getElementById('tbl-rows').value) || 2;
             const cols = parseInt(document.getElementById('tbl-cols').value) || 2;
-            let headerCells = ""; for(let i=0; i<cols; i++) headerCells += `<th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5;">H</th>`;
-            let bodyRows = ""; for(let r=0; r<rows-1; r++) { let rowCells = ""; for(let c=0; c<cols; c++) rowCells += `<td style="border:1px solid #d4d4d8; padding:8px;">&nbsp;</td>`; bodyRows += `<tr>${rowCells}</tr>`; }
+            let headerCells = ""; for(let i=0; i<cols; i++) headerCells += `<th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">H</th>`;
+            let bodyRows = ""; for(let r=0; r<rows-1; r++) { let rowCells = ""; for(let c=0; c<cols; c++) rowCells += `<td style="border:1px solid #d4d4d8; padding:8px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">&nbsp;</td>`; bodyRows += `<tr>${rowCells}</tr>`; }
             let tableHtml = `<table style="width:calc(100% - 3rem); border-collapse: collapse; margin-left:3rem;"><tbody><tr>${headerCells}</tr>${bodyRows}</tbody></table><br>`;
             editor.focus(); const sel = window.getSelection(); if (lastRange) { sel.removeAllRanges(); sel.addRange(lastRange); }
             document.execCommand('insertHTML', false, tableHtml);
-            document.getElementById('table-modal').classList.add('hidden'); saveHistory();
+            document.getElementById('table-modal').classList.add('hidden'); 
+            addSpacingAndSetTextStyle(); 
+            saveHistory();
         }
 
         function insertPageBreak() {
@@ -350,7 +461,9 @@
             if (!input.files[0]) return;
             const reader = new FileReader();
             reader.onload = (e) => {
-                const img = document.createElement('img'); img.src = e.target.result; img.style.width = "50%"; insertNodeAtCursor(img);
+                const img = document.createElement('img'); img.src = e.target.result; img.style.width = "50%"; 
+                insertNodeAtCursor(img);
+                addSpacingAndSetTextStyle(); // Auto-spacing
             };
             reader.readAsDataURL(input.files[0]); input.value = '';
         }
@@ -411,25 +524,12 @@
             new MutationObserver(() => initInteractive()).observe(editor, { childList: true, subtree: true });
         };
 
-        function execCmd(c, v=null) {
-            if (currentImg && ['justifyLeft', 'justifyCenter', 'justifyRight'].includes(c)) {
-                currentImg.style.marginLeft = (c === 'justifyLeft') ? "0" : "auto";
-                currentImg.style.marginRight = (c === 'justifyRight') ? "0" : "auto";
-                updateHandlePosition();
-            } else { document.execCommand(c, false, v); }
-            editor.focus(); saveHistory();
-        }
-
-        // [FIXED] Updated applyStyle to remove inherited style attributes (Fixes Image > Enter > Header margin issue)
         function applyStyle(t) {
             document.execCommand('formatBlock', false, 'p'); const sel = window.getSelection();
             if (sel.rangeCount > 0) {
                 let n = sel.anchorNode; while (n && n.nodeName !== 'P' && n !== editor) n = n.parentNode;
                 if (n && n.nodeName === 'P') {
-                    // RESET INLINE STYLES first to clear any inherited margins/alignment
                     n.removeAttribute('style');
-                    
-                    // APPLY CLASS
                     n.className = t==='H1' ? 'text-xl font-bold text-black mb-4 mt-6 pl-0' : t==='H2' ? 'text-lg font-bold text-black mb-3 mt-4 pl-6' : 'text-base text-black mb-2 pl-12';
                     if(t==='TB') n.classList.add('font-bold');
                 }
@@ -453,20 +553,20 @@
                     <table style="width:calc(100% - 3rem); border-collapse: collapse; margin-left:3rem;">
                         <thead>
                             <tr>
-                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; width:60px;">Rev.</th>
-                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; width:100px;">Date</th>
-                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; width:80px;">Change #</th>
-                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5;">Description of Change</th>
-                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; width:80px;">ORG</th>
+                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; width:60px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">Rev.</th>
+                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; width:100px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">Date</th>
+                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; width:80px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">Change #</th>
+                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">Description of Change</th>
+                                <th style="border:1px solid #d4d4d8; padding:8px; background:#f4f4f5; width:80px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">ORG</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="border:1px solid #d4d4d8; padding:8px;">001</td>
-                                <td style="border:1px solid #d4d4d8; padding:8px;">${new Date().toISOString().split('T')[0]}</td>
-                                <td style="border:1px solid #d4d4d8; padding:8px;">&nbsp;</td>
-                                <td style="border:1px solid #d4d4d8; padding:8px;">Initial Release</td>
-                                <td style="border:1px solid #d4d4d8; padding:8px;">&nbsp;</td>
+                                <td style="border:1px solid #d4d4d8; padding:8px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">001</td>
+                                <td style="border:1px solid #d4d4d8; padding:8px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">${new Date().toISOString().split('T')[0]}</td>
+                                <td style="border:1px solid #d4d4d8; padding:8px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">&nbsp;</td>
+                                <td style="border:1px solid #d4d4d8; padding:8px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">Initial Release</td>
+                                <td style="border:1px solid #d4d4d8; padding:8px; font-family:'Inter','Noto Sans KR',sans-serif; font-size:16px;">&nbsp;</td>
                             </tr>
                         </tbody>
                     </table><br>
@@ -499,11 +599,10 @@
             temp.querySelectorAll('.resizer, .img-handle').forEach(el => el.remove());
             const content = temp.innerHTML.replace(/text-zinc-[0-9]+/g, 'text-black');
             
-            // Layout Class Injection
             const layoutClass = document.getElementById('page-layout').value;
             const widthStyle = layoutClass === 'paper-wide' ? 'width: 350mm;' : 'width: 210mm;';
 
-            const finalHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${meta.full}</title><script src="https://cdn.tailwindcss.com"><\/script><script src="https://unpkg.com/lucide@latest"><\/script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet"><style>body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f4f4f5; margin: 0; padding: 40px 0; } .paper { ${widthStyle} min-height: 297mm; background: white; padding: 40px; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); position: relative; display: flex; flex-direction: column; margin: 0 auto; } header { border-bottom: 4px double #000; padding-bottom: 20px; margin-bottom: 30px; } .badge-black { background: #000; color: #fff; padding: 4px 14px; border-radius: 9999px; font-size: 20px; font-weight: 700; } .meta { display: flex; align-items: center; gap: 24px; text-[10px] font-bold text-zinc-500 uppercase tracking-widest; padding-left: 3rem; margin-bottom: 12px; } main { flex: 1; line-height: 1.6; color: #000; padding-left: 3rem; } footer { border-top: 1px solid #e2e8f0; margin-top: 50px; padding-top: 20px; text-align: center; opacity: 0.5; } img { border-radius: 4px; }</style></head><body><div class="paper"><header><div class="meta">${meta.type} / ${meta.model} / ${meta.proc}</div><div class="flex items-end gap-4" style="padding-left:3rem;"><span class="badge-black">${meta.step}</span><h1 style="font-size:28px; font-weight:800; margin:0;">${meta.name}</h1></div></header><main>${content}</main><footer><img src="https://asendia2025.github.io/mfg-capa/img/logo_company.png" style="height:18px; margin:0 auto 6px;"><div style="font-size:9px; font-weight:700; color:#94a3b8; text-transform:uppercase;">Manufacturing Technology Center</div></footer></div><script>lucide.createIcons();<\/script></body></html>`;
+            const finalHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${meta.full}</title><script src="https://cdn.tailwindcss.com"><\/script><script src="https://unpkg.com/lucide@latest"><\/script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet"><style>body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #f4f4f5; margin: 0; padding: 40px 0; } .paper { ${widthStyle} min-height: 297mm; background: white; padding: 40px; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); position: relative; display: flex; flex-direction: column; margin: 0 auto; } header { border-bottom: 4px double #000; padding-bottom: 20px; margin-bottom: 30px; } .badge-black { background: #000; color: #fff; padding: 4px 14px; border-radius: 9999px; font-size: 20px; font-weight: 700; } .meta { display: flex; align-items: center; gap: 24px; text-[10px] font-bold text-zinc-500 uppercase tracking-widest; padding-left: 3rem; margin-bottom: 12px; } main { flex: 1; line-height: 1.6; color: #000; padding-left: 3rem; } footer { border-top: 1px solid #e2e8f0; margin-top: 50px; padding-top: 20px; text-align: center; opacity: 0.5; } img { border-radius: 4px; } table { border-collapse: collapse; width: 100%; margin: 10px 0; } th, td { border: 1px solid #d4d4d8; padding: 8px; text-align: left; font-family: 'Inter', 'Noto Sans KR', sans-serif; font-size: 16px; vertical-align: middle; } th { background-color: #f4f4f5; font-weight: bold; } </style></head><body><div class="paper"><header><div class="meta">${meta.type} / ${meta.model} / ${meta.proc}</div><div class="flex items-end gap-4" style="padding-left:3rem;"><span class="badge-black">${meta.step}</span><h1 style="font-size:28px; font-weight:800; margin:0;">${meta.name}</h1></div></header><main>${content}</main><footer><img src="https://asendia2025.github.io/mfg-capa/img/logo_company.png" style="height:18px; margin:0 auto 6px;"><div style="font-size:9px; font-weight:700; color:#94a3b8; text-transform:uppercase;">Manufacturing Technology Center</div></footer></div><script>lucide.createIcons();<\/script></body></html>`;
             saveAs(new Blob([finalHtml], {type: "text/html;charset=utf-8"}), `${meta.full}.html`);
         }
         function formatStep(i) { i.value = i.value.replace(/[^0-9]/g, '').padStart(3, '0') || '001'; }
